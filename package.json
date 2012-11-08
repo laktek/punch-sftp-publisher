@@ -1,0 +1,33 @@
+{
+  "name": "punch-sftp-publisher",
+  "description": "Publish your site to any host using SFTP",
+  "keywords": [
+    "punch",
+    "sftp",
+    "publish"
+  ],
+  "version": "0.0.1",
+  "homepage": "https://github.com/laktek/punch-sftp-publisher",
+  "author": "Lakshan Perera <lakshan@web2media.net> (http://laktek.com)",
+  "licenses": "MIT",
+  "bugs": {
+    "url": "http://github.com/laktek/punch-sftp-publisher/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/laktek/punch-sftp-publisher.git"
+  },
+  "main": "./lib/sftp.js",
+  "dependencies": {
+    "underscore": ">= 1.4.2",
+    "punch": ">= 0.4.0",
+    "sftp": "git://github.com/laktek/node-sftp.git"
+  },
+  "devDependencies": {
+    "jasmine-node": ">= 1.0.26",
+    "jshint": ">= 0.9.1"
+  },
+  "scripts": {
+    "test": "jasmine-node spec"
+  }
+}
