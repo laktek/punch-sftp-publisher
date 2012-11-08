@@ -1,6 +1,6 @@
 # SFTP Publisher for Punch 
 
-Publish your site to any host that provides SFTP access.
+Publish your [Punch](http://laktek.github.com/punch) based sites to any host that provides SFTP access.
 
 ### How to Use 
 

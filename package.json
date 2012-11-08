@@ -1,6 +1,6 @@
 {
   "name": "punch-sftp-publisher",
-  "description": "Publish your site to any host using SFTP",
+  "description": "Publish your site to any host that supports SFTP",
   "keywords": [
     "punch",
     "sftp",
