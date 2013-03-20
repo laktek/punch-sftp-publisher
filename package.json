@@ -21,7 +21,7 @@
   "dependencies": {
     "underscore": ">= 1.4.2",
     "punch": ">= 0.4.0",
-    "sftp": "git://github.com/laktek/node-sftp.git"
+    "sftp": "git://github.com/action-io/sftp.js.git"
   },
   "devDependencies": {
     "jasmine-node": ">= 1.0.26",

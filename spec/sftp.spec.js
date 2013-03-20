@@ -75,58 +75,58 @@ describe("check if a file is modified", function() {
 describe("check and create a remote directory", function(){
 
 	it("takes the stat for the remote directory", function(){
-		var spy_stat = jasmine.createSpy();
+		var spy_ls = jasmine.createSpy();
 		var spy_callback = jasmine.createSpy();
-		sftp_publisher.client = {stat: spy_stat};
+		sftp_publisher.client = {ls: spy_ls};
 
 		sftp_publisher.checkAndCreateRemoteDirectory("public_html/site", spy_callback);
-		expect(spy_stat).toHaveBeenCalled();
+		expect(spy_ls).toHaveBeenCalled();
 	});
 
 	it("executes the callback if remote directory already exists", function(){
-		var spy_stat = jasmine.createSpy();
-		spy_stat.andCallFake(function(path, cbk){
-			cbk(null, {isDirectory: function(){ return true} });
+		var spy_ls = jasmine.createSpy();
+		spy_ls.andCallFake(function(path, cbk){
+			cbk(null, []);
 		});
 		var spy_callback = jasmine.createSpy();
-		sftp_publisher.client = {stat: spy_stat};
+		sftp_publisher.client = {ls: spy_ls};
 
 		sftp_publisher.checkAndCreateRemoteDirectory("public_html/site", spy_callback);
 		expect(spy_callback).toHaveBeenCalled();
 	});
 
 	it("creates a remote directory if it doesn't exists", function(){
-		var spy_stat = jasmine.createSpy();
-		spy_stat.andCallFake(function(path, cbk){
+		var spy_ls = jasmine.createSpy();
+		spy_ls.andCallFake(function(path, cbk){
 			cbk("error", null);
 		});
 		var spy_mkdir = jasmine.createSpy();
 		var spy_callback = jasmine.createSpy();
-		sftp_publisher.client = {stat: spy_stat, mkdir: spy_mkdir};
+		sftp_publisher.client = {ls: spy_ls, mkdir: spy_mkdir};
 
 		sftp_publisher.checkAndCreateRemoteDirectory("public_html/site", spy_callback);
 		expect(spy_mkdir.mostRecentCall.args[0]).toEqual("public_html/site");
 	});
 
 	it("executes the callback after creating the remote directory", function(){
-		var spy_stat = jasmine.createSpy();
-		spy_stat.andCallFake(function(path, cbk){
+		var spy_ls = jasmine.createSpy();
+		spy_ls.andCallFake(function(path, cbk){
 			cbk("error", null);
 		});
 		var spy_mkdir = jasmine.createSpy();
-		spy_mkdir.andCallFake(function(path, mode, cbk){
+		spy_mkdir.andCallFake(function(path, cbk){
 			cbk();
 		});
 		var spy_callback = jasmine.createSpy();
-		sftp_publisher.client = {stat: spy_stat, mkdir: spy_mkdir};
+		sftp_publisher.client = {ls: spy_ls, mkdir: spy_mkdir};
 
 		sftp_publisher.checkAndCreateRemoteDirectory("public_html/site", spy_callback);
 		expect(spy_callback).toHaveBeenCalled();
 	});
 
 	it("throws an exception if there's an error in creating the remote directory", function(){
-		var spy_stat = jasmine.createSpy();
-		spy_stat.andCallFake(function(path, cbk){
+		var spy_ls = jasmine.createSpy();
+		spy_ls.andCallFake(function(path, cbk){
 			cbk("error", null);
 		});
 		var spy_mkdir = jasmine.createSpy();
@@ -134,7 +134,7 @@ describe("check and create a remote directory", function(){
 			cbk("error");
 		});
 		var spy_callback = jasmine.createSpy();
-		sftp_publisher.client = {stat: spy_stat, mkdir: spy_mkdir};
+		sftp_publisher.client = {ls: spy_ls, mkdir: spy_mkdir};
 
 		expect(function(){sftp_publisher.checkAndCreateRemoteDirectory("public_html/site", spy_callback)}).toThrow();
 	});
@@ -155,24 +155,24 @@ describe("upload file", function() {
 		spyOn(fs, "readFile").andCallFake(function(path, callback){
 			callback(null, "content");
 		});
-		var spy_writefile = jasmine.createSpy();
+		var spy_putdata = jasmine.createSpy();
 		var spy_callback = jasmine.createSpy();
-		sftp_publisher.client = {writeFile: spy_writefile};
+		sftp_publisher.client = {putData: spy_putdata};
 
 		sftp_publisher.uploadFile("output/file", "public_html/site", spy_callback);
-		expect(spy_writefile.mostRecentCall.args[0]).toEqual("public_html/site");
+		expect(spy_putdata.mostRecentCall.args[0]).toEqual("public_html/site");
 	});
 
 	it("executes the callback after writing the file", function(){
 		spyOn(fs, "readFile").andCallFake(function(path, callback){
 			callback(null, "content");
 		});
-		var spy_writefile = jasmine.createSpy();
-		spy_writefile.andCallFake(function(path, buffer, callback){
+		var spy_putdata = jasmine.createSpy();
+		spy_putdata.andCallFake(function(path, buffer, callback){
 			callback(null);
 		});
 		var spy_callback = jasmine.createSpy();
-		sftp_publisher.client = {writeFile: spy_writefile};
+		sftp_publisher.client = {putData: spy_putdata};
 
 		sftp_publisher.uploadFile("output/file", "public_html/site", spy_callback);
 		expect(spy_callback).toHaveBeenCalled();
@@ -182,12 +182,12 @@ describe("upload file", function() {
 		spyOn(fs, "readFile").andCallFake(function(path, callback){
 			callback(null, "content");
 		});
-		var spy_writefile = jasmine.createSpy();
-		spy_writefile.andCallFake(function(path, buffer, callback){
+		var spy_putdata = jasmine.createSpy();
+		spy_putdata.andCallFake(function(path, buffer, callback){
 			callback("error");
 		});
 		var spy_callback = jasmine.createSpy();
-		sftp_publisher.client = {writeFile: spy_writefile};
+		sftp_publisher.client = {putData: spy_putdata};
 
 		expect(function(){ sftp_publisher.uploadFile("output/file", "public_html/site", spy_callback)	}).toThrow();
 	});
