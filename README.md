@@ -20,16 +20,16 @@ Publish your [Punch](http://laktek.github.com/punch) based sites to any host tha
 
 * Also, you must define `publish` settings in the config. 
 
-		"publish" : {
-        "strategy" : "sftp",
-        "options" : {
-            "host" : "hostname",
-            "username" : "sftpuser",
-            "port" : "22",
-            "private_key" : "~/.ssh/id_rsa",
-            "upload_path" : "/var/www/"
-        }
-    }
+			"publish" : {
+				"strategy" : "sftp",
+				"options" : {
+						"host" : "hostname",
+						"username" : "sftpuser",
+						"port" : "22",
+						"private_key" : "~/.ssh/id_rsa",
+						"upload_path" : "/var/www/"
+				}
+			}
 
 You must specify server's hostname and your username to login. Files will be uploaded to the remote path specified as upload_path.
 
