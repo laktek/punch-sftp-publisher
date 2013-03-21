@@ -26,14 +26,12 @@ Publish your [Punch](http://laktek.github.com/punch) based sites to any host tha
 						"host" : "hostname",
 						"username" : "sftpuser",
 						"port" : "22",
-						"private_key" : "~/.ssh/id_rsa",
+						"private_key" : "/home/user/.ssh/id_rsa",
 						"upload_path" : "/var/www/"
 				}
 			}
 
-You must specify server's hostname and your username to login. Files will be uploaded to the remote path specified as upload_path.
-
-Apart from the default options, you can specify any other options that are supported by node-sftp library.
+You must specify server's hostname and your username to login. If you're using a private/public key to authenticate, make sure you specify the explicit full path to the private key (or provide the private key as a string). Files will be uploaded to the remote path specified as upload_path.
 
 * Then, you can publish your site by running `punch publish` (or `punch p`) command.
 

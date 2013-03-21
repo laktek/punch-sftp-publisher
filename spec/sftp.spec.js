@@ -1,5 +1,6 @@
 var fs = require("fs");
 var sftp_publisher = require("../lib/sftp.js");
+var Sftp = require("sftp.js");
 
 describe("calling publish", function() {
 
@@ -58,6 +59,29 @@ describe("retrieve the sftp options from the config", function() {
 
 		expect(function(){ sftp_publisher.retrieveOptions(supplied_config) }).toThrow(error);
 
+	});
+
+});
+
+describe("connect to remote server", function() {
+
+	it("assign private key given as a string", function() {
+		var private_key = "-----BEGIN RSA PRIVATE KEY-----\nProc-Type: 4,ENCRYPTED...";
+		var supplied_config = { "private_key": private_key };
+
+		sftp_publisher.connectToRemote(supplied_config);
+		expect(sftp_publisher.client.key).toEqual(private_key);
+	});
+
+	it("read and assign private key given as a file path", function() {
+		var private_key = "-----BEGIN RSA PRIVATE KEY-----\nProc-Type: 4,ENCRYPTED...";
+		var private_key_path = "~/.ssh/id_rsa";
+		var supplied_config = { "private_key": private_key_path };
+
+		spyOn(fs, "readFileSync").andReturn(private_key);
+
+		sftp_publisher.connectToRemote(supplied_config);
+		expect(sftp_publisher.client.key).toEqual(private_key);
 	});
 
 });
