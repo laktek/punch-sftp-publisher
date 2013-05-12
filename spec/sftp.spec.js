@@ -187,6 +187,22 @@ describe("upload file", function() {
 		expect(spy_putdata.mostRecentCall.args[0]).toEqual("public_html/site");
 	});
 
+  it("sets the file permissions to 0755", function(){
+		spyOn(fs, "readFile").andCallFake(function(path, callback){
+			callback(null, "content");
+		});
+		var spy_putdata = jasmine.createSpy()
+		spy_putdata.andCallFake(function(path, buffer, callback){
+			callback(null);
+    });
+    var spy_chmod = jasmine.createSpy();
+		var spy_callback = jasmine.createSpy();
+		sftp_publisher.client = {putData: spy_putdata, chmod: spy_chmod};
+
+		sftp_publisher.uploadFile("output/file", "public_html/site", spy_callback);
+		expect(spy_chmod).toHaveBeenCalledWith("0755", "public_html/site", jasmine.any(Function));
+  });
+
 	it("executes the callback after writing the file", function(){
 		spyOn(fs, "readFile").andCallFake(function(path, callback){
 			callback(null, "content");
@@ -195,8 +211,12 @@ describe("upload file", function() {
 		spy_putdata.andCallFake(function(path, buffer, callback){
 			callback(null);
 		});
+    var spy_chmod = jasmine.createSpy();
+    spy_chmod.andCallFake(function(permission, path, callback){
+			callback(null);
+		});
 		var spy_callback = jasmine.createSpy();
-		sftp_publisher.client = {putData: spy_putdata};
+		sftp_publisher.client = {putData: spy_putdata, chmod: spy_chmod};
 
 		sftp_publisher.uploadFile("output/file", "public_html/site", spy_callback);
 		expect(spy_callback).toHaveBeenCalled();
@@ -215,5 +235,23 @@ describe("upload file", function() {
 
 		expect(function(){ sftp_publisher.uploadFile("output/file", "public_html/site", spy_callback)	}).toThrow();
 	});
+
+  it("throws an exception if there's an error in setting file permission'", function(){
+		spyOn(fs, "readFile").andCallFake(function(path, callback){
+			callback(null, "content");
+		});
+		var spy_putdata = jasmine.createSpy()
+    spy_putdata.andCallFake(function(path, callback){
+			callback(null);
+    });
+    var spy_chmod = jasmine.createSpy();
+    spy_chmod.andCallFake(function(permission, path, callback){
+			callback("error");
+		});
+		var spy_callback = jasmine.createSpy();
+		sftp_publisher.client = {putData: spy_putdata, chmod: spy_chmod};
+
+		expect(function(){ sftp_publisher.uploadFile("output/file", "public_html/site", spy_callback)	}).toThrow();
+  });
 
 });
