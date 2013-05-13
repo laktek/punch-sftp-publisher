@@ -6,7 +6,7 @@
     "sftp",
     "publish"
   ],
-  "version": "1.0.3",
+  "version": "1.0.4",
   "homepage": "https://github.com/laktek/punch-sftp-publisher",
   "author": "Lakshan Perera <lakshan@web2media.net> (http://laktek.com)",
   "licenses": "MIT",
